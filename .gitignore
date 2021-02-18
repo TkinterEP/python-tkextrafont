@@ -1,0 +1,5 @@
+# IntelliJ
+/.idea
+
+# Build Results
+./XBUILD
