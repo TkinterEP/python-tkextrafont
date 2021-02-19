@@ -13,8 +13,10 @@ addons:
     - fontconfig
     - libfontconfig1
     - libfontconfig1-dev
+    - cmake
+    - cmake-data
+    - build-essential
 install:
-- sudo apt install cmake build-essential
 - python -m pip install nose scikit-build
 script:
 - python setup.py bdist_wheel
