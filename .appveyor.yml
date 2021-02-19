@@ -1,0 +1,33 @@
+environment:
+  matrix:
+  - PYTHON: "C:\\PYTHON38-x64"
+build: off
+install:
+- set PATH=C:\msys64\usr\bin;%PATH%
+# Load PGP Keys for Msys64
+- bash -lc "curl -O http://repo.msys2.org/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz"
+- bash -lc "curl -O http://repo.msys2.org/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz.sig"
+- bash -lc "pacman-key --verify msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz.sig"
+- bash -lc "pacman -U --noconfirm --config <(echo) msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz"
+# Kill gpg-agent due to bug in MSYS
+- TaskKill /IM gpg-agent.exe /F
+# Update known packages
+- bash -lc "pacman --needed --noconfirm -Syu"
+- bash -lc "pacman --needed --noconfirm -Sy"
+# Install Python build dependencies
+- "%PYTHON%\\python.exe -m pip install scikit-build nose"
+# Now using MinGW pkg-config and related executables
+- set PATH=C:\msys64\mingw64\bin;%PATH%
+# Download Dependencies (dependency walker)
+- appveyor DownloadFile https://github.com/lucasg/Dependencies/releases/download/v1.10/Dependencies_x64_Release.zip
+- 7z e Dependencies_x64_Release.zip -odeps -y
+# Add %PYTHON% to the path for libffi-7.dll
+- set PATH=%PYTHON%;C:\msys64\mingw64\lib;%PATH%
+build_script:
+- "%PYTHON%\\python.exe setup.py build bdist_wheel"
+# Simplify PATH so as to test binary distribution
+- set PATH=C:\WINDOWS\system32;C:\WINDOWS
+test_script:
+- "%PYTHON%\\python.exe -m nose"
+artifacts:
+- path: "/dist/*.whl"
