@@ -1,0 +1,23 @@
+language: python
+dist: bionic
+compiler: gcc
+python:
+- "3.8"
+services:
+- xvfb
+addons:
+  apt:
+    packages:
+    - tcl-dev
+    - tk-dev
+    - fontconfig
+    - libfontconfig1
+    - libfontconfig1-dev
+install:
+- sudo apt install cmake build-essential
+- python -m pip install nose scikit-build
+script:
+- python setup.py bdist_wheel
+- python setup.py install
+- rm -rf ./extrafont
+- python -m nose

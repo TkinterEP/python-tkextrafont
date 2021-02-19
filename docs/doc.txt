@@ -9,7 +9,7 @@ once these fonsts are loaded, they can be used in the same way of pre-installed 
 These loaded fonts are only visible by the process (app) who loaded'em, and then
 disappear when the app terminates.
 
-This package provides an homogeneous multi platform mechamism for such purpose.
+This package provides an homogeneous multi platform mechanism for such purpose.
 Supported tcltk runtimes are
  * Windows (32/64 bit)
  * Linux   (32/64 bit)
@@ -21,7 +21,7 @@ Note that a specific runtime support (e.g. "Linux 32") is not referred to the
 hosting O.S. architecture, but it's referred to the architecture of the TclTk 
 interpreter. 
 E.g. if you have a 32-bit TclTk interpreter running on a 64-bit Linux, 
-then the binary extension for linux-x32 will be automaticaaly selected.
+then the binary extension for linux-x32 will be automatically selected.
  
 =======
 
@@ -91,8 +91,8 @@ extrafont::availableFamilies ?_fontFamilyPattern_?
  returns
   Courier {Comic Sans MS}  .....
  **WARNING** - on MacOSX after loading/unloading one or more fonts, the list
- of the availables fonts won't be updated till the next event-loop update.
- For this reason, if your script needs to call isAvalable/availableFamilies
+ of the available fonts won't be updated till the next event-loop update.
+ For this reason, if your script needs to call isAvailable/availableFamilies
  just after loading/unloading a fontfile, you need to call the "update" command. 
 
  

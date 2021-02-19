@@ -2,7 +2,7 @@
   ==========================================================================
   TclTk extension (Win/Linux/MacOSX):
     extrafont::load
-  This command makes available to TclTk apps a new font without isntalling it.
+  This command makes available to TclTk apps a new font without installing it.
    ---
   July 2017 - A.Buratti fecit
   May  2018 - BugFix for MY_FcConfigAppFontRemoveFile (linux only)

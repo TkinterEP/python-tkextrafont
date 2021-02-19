@@ -1,5 +1,103 @@
-# IntelliJ
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+
+# CLion
 /.idea
 
-# Build Results
-./XBUILD
+# CMake
+/CMakeFiles
+/cmake-build*
+
+# Code::Blocks
+*.layout
+*.cbp
+*.depend
+
+# Project Files
+Makefile
+main-*
+layout.*
+!layout.rst
+/_skbuild
+
+# CMake
+CMakeCache.txt
+/CMakeTmp
+*CMakeTmp*
+*CMakeFiles*
+*CMakeCache.txt
+*cmake_install.cmake
+install_manifest.txt
+CTestTestfile.cmake
+
+# Generated files
+/library/pkgIndex.tcl
+
+# Python packages
+/*.egg-info
+/build
+/dist
+*.pyc
+MANIFEST
+/venv
+
+# Documentation
+/docs/_build
+/docs/html
+/docs/_doctrees
+/docs/doxygen/xml
+/html
+/latex
+
+# Dependencies Program
+/deps

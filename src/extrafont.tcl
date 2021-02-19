@@ -13,12 +13,12 @@
 
 namespace eval extrafont {
 	 # FFFD-table is the core data structure holding all the relations between
-	 #  font-files, font-familiies, font-fullnames and font-details.
+	 #  font-files, font-families, font-full-names and font-details.
 	 # *** NOTE: we are talking just about fonts loaded with extrafont::load;  
 	 # ***      fonts loaded at system-level are not included here.
 	 #  They first three components FFF (font-file, font-familiy, font-fullname)
 	 #  gives you a primary key for the D component (the font-detail dictionary)
-	 #  
+
 	variable _FFFD_Table    ;# array: key is (file,family,fullname)
 							;#        value is the font-detail
 	variable _File2TempFile ;# array: key is the originale filename (normalized), 
@@ -33,12 +33,12 @@ namespace eval extrafont {
 		expr { [lindex [file system $filename] 0] != "native" }
 	}
 
-	 # load thi submodule" fontnameinfo.tcl" in a sub-namespace
+	 # Load this submodule "fontnameinfo.tcl" in a sub-namespace
 	 # It provides the 'nameinfo' command
 	namespace eval nametable {
 		source [file join [file dirname [info script]] fontnameinfo.tcl]
 	}	
-	 # when Tk is destroyed (e.g on exit), then do a cleanup
+	 # When Tk is destroyed (e.g on exit), then do a cleanup
 	trace add command "." delete {apply { {args} {extrafont::cleanup} } }
 }
 
@@ -299,7 +299,7 @@ proc extrafont::isAvailable {family} {
  #   whilst
  #    extrafont::avalableFamilies A*
  #   matches all the loaded font-families (both system-wide fonts and private-fonts)
-# .....  brutto !!!!
+ # .....  brutto !!!!
  #   (and it's a case-sensitive matching)
  #   
 proc extrafont::availableFamilies { {familyPattern {*}} } {

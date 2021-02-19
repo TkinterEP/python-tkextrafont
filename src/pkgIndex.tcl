@@ -1,4 +1,3 @@
-
 package ifneeded extrafont 1.2  [list apply { dir  {
 	package require Tk
 	
@@ -14,8 +13,8 @@ package ifneeded extrafont 1.2  [list apply { dir  {
 			}
 		}
 	}
-	set tail_libFile extrafont[info sharedlibextension]
-	 # try to guess the tcl-interpreter architecture (32/64 bit) ...
+	set libfile libextrafont[info sharedlibextension]
+	 # Try to guess the tcl-interpreter architecture (32/64 bit) ...
 	set arch $::tcl_platform(pointerSize)
 	switch -- $arch {
 		4 { set arch x32  }
@@ -23,14 +22,9 @@ package ifneeded extrafont 1.2  [list apply { dir  {
 		default { error "extrafont: Unsupported architecture: Unexpected pointer-size $arch!!! "}
 	}
 	
-	
-	set dir_libFile [file join $thisDir ${os}-${arch}]
-	if { ! [file isdirectory $dir_libFile ] } {
-		error "extrafont: Unsupported platform ${os}-${arch}"
-	}
 
-	set full_libFile [file join $dir_libFile $tail_libFile]			 
-	load $full_libFile
+	set libfile_abspath [file join [file normalize $dir] $libfile]
+	load $libfile_abspath
 	
 	namespace eval extrafont {}
 	source [file join $thisDir extrafont.tcl]
@@ -39,5 +33,3 @@ package ifneeded extrafont 1.2  [list apply { dir  {
 	package provide extrafont 1.2
 
 }} $dir] ;# end of lambda apply
-
-
