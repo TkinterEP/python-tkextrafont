@@ -15,6 +15,7 @@ addons:
     - libfontconfig1-dev
     - cmake
     - cmake-data
+    - extra-cmake-modules
     - build-essential
 install:
 - python -m pip install nose scikit-build
