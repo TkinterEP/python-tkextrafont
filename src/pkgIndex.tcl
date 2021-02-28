@@ -1,7 +1,9 @@
 package ifneeded extrafont 1.2  [list apply { dir  {
 	package require Tk
-	
-	set thisDir [file normalize ${dir}]
+
+	if {![info exists $dir]} {
+	    set dir [pwd]
+	}
 
 	set os $::tcl_platform(platform)
 	switch -- $os {
@@ -19,7 +21,7 @@ package ifneeded extrafont 1.2  [list apply { dir  {
 	switch -- $arch {
 		4 { set arch x32  }
 		8 { set arch x64 }
-		default { error "extrafont: Unsupported architecture: Unexpected pointer-size $arch!!! "}
+		default { error "extrafont: Unsupported architecture: Unexpected pointer-size $arch"}
 	}
 	
 
@@ -27,8 +29,8 @@ package ifneeded extrafont 1.2  [list apply { dir  {
 	load $libfile_abspath
 	
 	namespace eval extrafont {}
-	source [file join $thisDir extrafont.tcl]
-	source [file join $thisDir futmp.tcl]
+	source [file join $dir extrafont.tcl]
+	source [file join $dir futmp.tcl]
 	
 	package provide extrafont 1.2
 
