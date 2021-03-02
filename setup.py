@@ -56,7 +56,7 @@ elif "win" in sys.platform:
 
     for dep in dependencies:
         printf("Installing dependency {}...".format(dep), end=" ")
-        sp.call(["pacman", "--needed", "--noconfirm", "-S", "mingw-w64-x86_64-{}".format(dep)], stdout=sp.PIPE)
+        sp.call(["pacman", "--needed", "--noconfirm", "-S", "mingw-w64-x86_64-{}".format(dep)])  # , stdout=sp.PIPE)
         printf("Done.")
     sp.call(["cmake", ".", "-G", "MinGW Makefiles"])
     sp.call(["mingw32-make"])
