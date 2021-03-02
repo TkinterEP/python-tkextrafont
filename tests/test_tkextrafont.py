@@ -16,15 +16,16 @@ class TestTkExtraFont(TestCase):
 
     def setUp(self):
         self.window = tk.Tk()
-        tkextrafont.load_extrafont(self.window)
+        tkextrafont.load(self.window)
 
     def test_font_load(self):
-        assert not self.window.is_font_available("Overhaul")
-        loaded = set(self.window.loaded_fonts())
-        self.window.load_font(os.path.join(self.PATH, "overhaul.ttf"))
-        assert len(list(set(self.window.loaded_fonts()) - loaded)) != 0
-        assert self.window.is_font_available("Overhaul")
-        assert "Overhaul" in self.window.loaded_fonts()
+        font = tkextrafont.Font()
+        assert not font.is_font_available("Overhaul")
+        loaded = set(font.loaded_fonts())
+        loaded_font = tkextrafont.Font(file=os.path.join(self.PATH, "overhaul.ttf"))
+        assert len(list(set(font.loaded_fonts()) - loaded)) != 0
+        assert font.is_font_available("Overhaul")
+        assert "Overhaul" in font.loaded_fonts()
 
         label = tk.Label(self.window, text="Overhaul font", font=("Overhaul", 12, "bold"))
         label.pack()

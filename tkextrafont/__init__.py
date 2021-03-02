@@ -8,16 +8,10 @@ project files can be found here:
 <https://sourceforge.net/projects/irrational-numbers/>
 
 Provides interface to load the extrafont library into a Tk instance by
-loading it into the Tk interpreter. After loading additional functions
-are available on the Tk instance:
-
-load_font: Load a font file into the Tk interpreter
-unload_font: Unload a font family from the Tk interpreter
-loaded_fonts: Return a List of font families loaded with extrafont
-font_info: Return information on the font contained in a font file
-is_font_available: Return whether a font is available for usage
+loading it into the Tk interpreter.
 """
 import tkinter as tk
+import tkinter.font as tkfont
 # Standard Library
 from contextlib import contextmanager
 import os
@@ -74,36 +68,51 @@ def get_file_directory():
     return os.path.dirname(_FILE_DIR)
 
 
-def load_extrafont(window):
-    # type: (tk.Tk) -> None
-    """Load extrafont into a tk interpreter and provide functions"""
+class Font(tkfont.Font):
+    """
+    tk.Font wrapper that allows loading fonts from a file
 
-    def load_font(file_name):
-        # type: (str) -> None
-        window.tk.call("extrafont::load", file_name)
+    Loads tkextrafont if the package has not yet been loaded.
+    """
 
-    def unload_font(font_name):
-        # type: (str) -> None
-        window.tk.call("extrafont::unload", font_name)
+    def __init__(self, root=None, font=None, name=None, exists=False, file=None, **options):
+        """
+        :param file: Path to the file to load a font from
+        """
+        if file is None:  # May as well use normal tk.Font
+            tkfont.Font.__init__(self, root, font, name, exists, **options)
+            return
+        self._file = file
+        root = root or tk._default_root
+        if root is None:
+            raise tk.TclError("No Tk instance available to get interpreter from")
+        if not getattr(root, "_tkextrafont_loaded", False):
+            load(root)
+        # Load the font file
+        root.tk.call("extrafont::load", file)
+        tkfont.Font.__init__(self, root, font, name, exists, **options)
 
-    def loaded_fonts():
-        # type: () -> list
-        return window.tk.call("extrafont::query", "families")
+    def unload(self):
+        """Unload the current font"""
+        self._tk.call("extrafont::unload", self.name)  # self._tk available after tk.font.Font.__init__
 
-    def font_info(file_name):
-        # type: (str) -> List[Dict[str, str]]
-        return list(map(_tk_dict_to_dict, window.tk.call("extrafont::nameinfo", file_name)))
+    def loaded_fonts(self) -> List[str]:
+        """Return a list of fonts loaded with extrafont"""
+        return self._tk.call("extrafont::query", "families")
 
-    def is_font_available(font_name):
-        # type: (str) -> bool
-        return window.tk.call("extrafont::isAvailable", font_name)
+    def font_info(self, fname: str) -> List[Dict[str, str]]:
+        """Return info of a font file"""
+        return list(map(_tk_dict_to_dict, self._tk.call("extrafont::nameinfo", fname)))
 
-    window.tk.eval("set dir {}".format(get_file_directory()))
-    with chdir(get_file_directory()):
+    def is_font_available(self, font_name) -> bool:
+        """Return a boolean whether a font is available"""
+        return self._tk.call("extrafont::isAvailable", font_name)
+
+def load(window: tk.Tk):
+    """Load extrafont into a Tk interpreter"""
+    local = os.path.abspath(os.path.dirname(__file__))
+    print(local)
+    with chdir(local):
         window.tk.eval("source pkgIndex.tcl")
-    window.tk.call("package", "require", "extrafont")
-    window.load_font = load_font
-    window.is_font_available = is_font_available
-    window.unload_font = unload_font
-    window.loaded_fonts = loaded_fonts
-    window.font_info = font_info
+        window.tk.eval("package require extrafont")
+        window._tkextrafont_loaded = True
