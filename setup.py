@@ -174,7 +174,7 @@ else:
 setup(
     name="tkextrafont",
     version="v0.6.0",
-    packages="tkextrafont",
+    packages=["tkextrafont"],
     description="Fonts loader for Tkinter",
     author="The extrafont and tkextrafont authors",
     url="https://github.com/TkinterEP/tkextrafont",
