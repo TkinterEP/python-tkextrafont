@@ -11,6 +11,25 @@ install:
 - bash -lc "pacman -U --noconfirm --config <(echo) msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz"
 # Kill gpg-agent due to bug in MSYS
 - TaskKill /IM gpg-agent.exe /F
+# Download and unpack zstd for win64 to unpack MSYS packages
+- appveyor DownloadFile https://github.com/facebook/zstd/releases/download/v1.4.8/zstd-v1.4.8-win64.zip
+- 7z e zstd-v1.4.8-win64.zip -ozstd -y
+# Download and install zstd for MSYS due to bug in MSYS
+- appveyor DownloadFile http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-zstd-1.4.8-2-any.pkg.tar.zst
+- zstd\zstd.exe -d mingw-w64-x86_64-zstd-1.4.8-2-any.pkg.tar.zst
+- dir
+- 7z a -tgzip mingw-w64-x86_64-zstd-1.4.8-2-any.pkg.tar.gz mingw-w64-x86_64-zstd-1.4.8-2-any.pkg.tar
+- bash -lc "cd /c/projects/python-tksvg; ls -l; pacman --noconfirm -U mingw-w64-x86_64-zstd-1.4.8-2-any.pkg.tar.gz"
+# Download and install pacman for MSYS due to bug in MSYS
+- appveyor DownloadFile http://repo.msys2.org/msys/x86_64/pacman-5.2.2-9-x86_64.pkg.tar.zst
+- 7z e zstd-v1.4.8-win64.zip -ozstd -y
+- zstd\zstd.exe -d pacman-5.2.2-9-x86_64.pkg.tar.zst
+- dir
+- 7z a -tgzip pacman-5.2.2-9-x86_64.pkg.tar.gz pacman-5.2.2-9-x86_64.pkg.tar
+- bash -lc "cd /c/projects/python-tksvg; ls -l; pacman --noconfirm --nodeps --nodeps -U pacman-5.2.2-9-x86_64.pkg.tar.gz"
+# Cleanup after bug workarounds
+- bash -lc "rm -rf zstd"
+- bash -lc "rm -rf *.tar *.zst"
 # Update known packages
 - bash -lc "pacman --needed --noconfirm -Syu"
 - bash -lc "pacman --needed --noconfirm -Sy"
