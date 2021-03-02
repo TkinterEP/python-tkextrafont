@@ -103,7 +103,17 @@ INCLUDE_DIRECTORIES ( ${PROJECT_SOURCE_DIR}/generic )
 ## ===========================================================================
 ##  Locate fontconfig
 ## ===========================================================================
-FIND_PACKAGE( Fontconfig REQUIRED)
+FIND_PACKAGE( Fontconfig )
+IF ( ${Fontconfig_FOUND} )
+    MESSAGE ( STATUS "Found FontConfig with CMake!" )
+ELSE ()
+    FIND_PACKAGE( PkgConfig REQUIRED )
+    pkg_check_modules ( Fontconfig REQUIRED fontconfig )
+    MESSAGE ( STATUS "Found Fontconfig with pkg-config!" )
+ENDIF()
+MESSAGE ( STATUS "  Fontconfig_INCLUDE_DIRS: " ${Fontconfig_INCLUDE_DIRS} )
+MESSAGE ( STATUS "  Fontconfig_LIBRARIES:    " ${Fontconfig_LIBRARIES} )
+
 INCLUDE_DIRECTORIES ( ${Fontconfig_INCLUDE_DIRS} )
 
 ## ===========================================================================
