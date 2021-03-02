@@ -154,10 +154,14 @@ elif "win" in sys.platform:
                     shutil.copyfile(p, t)
                 else:
                     printf("Copying {}".format(p))
-                    shutil.copyfile(p, os.path.join(target, os.path.basename(p)))
+                    target_file = os.path.join(target, os.path.basename(p))
+                    try:
+                        shutil.copyfile(p, target_file)
+                    except shutil.SameFileError:
+                        continue
 
     specials = {}
-    DependencyWalker("libextrafont.dll", specials=specials).copy_to_target("extrafont")
+    DependencyWalker("tkextrafont/libextrafont.dll", specials=specials).copy_to_target("extrafont")
     kwargs = {"package_data": {"extrafont": ["*.dll", "pkgIndex.tcl", "extrafont.tcl"] + ["{}/{}".format(dir.strip("/"), base) for base, dir in specials.items()]}}
 
 else:
