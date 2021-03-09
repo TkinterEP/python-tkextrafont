@@ -7,4 +7,7 @@ rm cmake_install.cmake
 rm -rf cmake-build-debug cmake-build-release
 rm -rf CMakeFiles
 rm -rf _skbuild
-rm -rf tkextrafont.egg_info
+rm -rf tkextrafont.egg-info
+rm Makefile MANIFEST extrafont.cbp
+rm -rf Testing
+rm -rf ./venv/lib/*tkextrafont*

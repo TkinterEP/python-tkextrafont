@@ -175,6 +175,7 @@ setup(
     name="tkextrafont",
     version="v0.6.0",
     packages=["tkextrafont"],
+    package_data={"tkextrafont": ["extrafont.tcl", "fontnameinfo.tcl", "futmp.tcl", "pkgIndex.tcl"]},
     description="Fonts loader for Tkinter",
     author="The extrafont and tkextrafont authors",
     url="https://github.com/TkinterEP/tkextrafont",

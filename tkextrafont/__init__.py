@@ -111,7 +111,6 @@ class Font(tkfont.Font):
 def load(window: tk.Tk):
     """Load extrafont into a Tk interpreter"""
     local = os.path.abspath(os.path.dirname(__file__))
-    print(local)
     with chdir(local):
         window.tk.eval("source pkgIndex.tcl")
         window.tk.eval("package require extrafont")
