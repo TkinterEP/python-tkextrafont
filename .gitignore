@@ -101,7 +101,3 @@ MANIFEST
 
 # Dependencies Program
 /deps
-
-# Generated package
-tkextrafont/*
-!tkextrafont/__init__.py
