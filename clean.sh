@@ -9,4 +9,5 @@ rm -rf _skbuild
 rm -rf tkextrafont.egg-info
 rm Makefile MANIFEST extrafont.cbp
 rm -rf Testing
-rm -rf ./venv/lib/*tkextrafont*
+rm -rf ./venv/lib/*/site-packages/*tkextrafont*
+rm ./libextrafont*

@@ -137,9 +137,9 @@ ENDIF ( TTK_STUB_LIBRARY )
 # ENDIF ( TK_LIBRARY_STATIC )
 
 INSTALL ( TARGETS ${PKG_TARGET_LIB_NAME}
-        RUNTIME DESTINATION tkextrafont
-        LIBRARY DESTINATION tkextrafont
-        ARCHIVE DESTINATION tkextrafont )
+        RUNTIME DESTINATION ./tkextrafont
+        LIBRARY DESTINATION ./tkextrafont
+        ARCHIVE DESTINATION ./tkextrafont )
 INSTALL ( FILES
             tkextrafont/pkgIndex.tcl
             tkextrafont/extrafont.tcl
