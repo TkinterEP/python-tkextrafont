@@ -135,12 +135,15 @@ ENDIF ( TTK_STUB_LIBRARY )
 # IF ( TK_LIBRARY_STATIC )
 #   TARGET_LINK_LIBRARIES ( ${PKG_TARGET_LIB_NAME} ${TK_LIBRARY_STATIC} )
 # ENDIF ( TK_LIBRARY_STATIC )
-CONFIGURE_FILE( src/extrafont.tcl tkextrafont/extrafont.tcl )
-CONFIGURE_FILE( src/fontnameinfo.tcl tkextrafont/fontnameinfo.tcl )
-CONFIGURE_FILE( src/futmp.tcl tkextrafont/futmp.tcl )
-CONFIGURE_FILE( src/pkgIndex.tcl tkextrafont/pkgIndex.tcl )
+ADD_CUSTOM_TARGET ( copy ALL ${CMAKE_COMMAND} -E copy
+        ${CMAKE_SOURCE_DIR}/src/extrafont.tcl
+        ${CMAKE_SOURCE_DIR}/src/fontnameinfo.tcl
+        ${CMAKE_SOURCE_DIR}/src/pkgIndex.tcl
+        ${CMAKE_SOURCE_DIR}/src/futmp.tcl
+        ./tkextrafont )
+ADD_DEPENDENCIES ( ${PKG_TARGET_LIB_NAME} copy )
 
-SET( LIBRARY_OUTPUT_PATH tkextrafont )
+SET ( LIBRARY_OUTPUT_PATH tkextrafont )
 INSTALL ( TARGETS ${PKG_TARGET_LIB_NAME}
         RUNTIME DESTINATION ./tkextrafont
         LIBRARY DESTINATION ./tkextrafont
