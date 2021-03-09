@@ -23,5 +23,5 @@ install:
 script:
 - python setup.py bdist_wheel
 - python setup.py install
-- rm -rf ./extrafont
+- rm -rf ./tkextrafont
 - python -m nose

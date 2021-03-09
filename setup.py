@@ -43,7 +43,11 @@ if "linux" in sys.platform:
         def run(self):
             build.run(self)
 
-    kwargs = {"install_requires": ["scikit-build"], "cmdClass": {"build": BuildCommand}}
+
+    kwargs = {
+        "install_requires": ["scikit-build"], "cmdClass": {"build": BuildCommand},
+        "package_data": {"tkextrafont": ["extrafont.tcl", "fontnameinfo.tcl", "futmp.tcl", "pkgIndex.tcl"]}
+    }
 
 elif "win" in sys.platform:
     import os
@@ -160,9 +164,12 @@ elif "win" in sys.platform:
                     except shutil.SameFileError:
                         continue
 
+
     specials = {}
     DependencyWalker("libextrafont.dll", specials=specials).copy_to_target("tkextrafont")
-    kwargs = {"package_data": {"extrafont": ["*.dll", "pkgIndex.tcl", "extrafont.tcl"] + ["{}/{}".format(dir.strip("/"), base) for base, dir in specials.items()]}}
+    kwargs = {"package_data": {
+        "extrafont": ["*.dll", "pkgIndex.tcl", "extrafont.tcl", "fontnameinfo.tcl", "futmp.tcl"] + [
+            "{}/{}".format(dir.strip("/"), base) for base, dir in specials.items()]}}
 
 else:
     printf("Only Linux and Windows are currently supported by the build system")
@@ -170,12 +177,10 @@ else:
     printf("contact the project author.")
     raise RuntimeError("Unsupported platform")
 
-
 setup(
     name="tkextrafont",
     version="v0.6.0",
     packages=["tkextrafont"],
-    package_data={"tkextrafont": ["extrafont.tcl", "fontnameinfo.tcl", "futmp.tcl", "pkgIndex.tcl"]},
     description="Fonts loader for Tkinter",
     author="The extrafont and tkextrafont authors",
     url="https://github.com/TkinterEP/tkextrafont",
