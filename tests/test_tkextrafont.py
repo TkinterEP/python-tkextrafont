@@ -1,8 +1,10 @@
 """
 Author: RedFantom
-License: GNU GPLv3
+License: MIT License
 Copyright (c) 2021 RedFantom
 """
+import sys
+sys.path = sys.path[2:]
 import tkinter as tk
 import tkextrafont
 from unittest import TestCase
@@ -22,10 +24,14 @@ class TestTkExtraFont(TestCase):
         font = tkextrafont.Font()
         assert not font.is_font_available("Overhaul")
         loaded = set(font.loaded_fonts())
-        loaded_font = tkextrafont.Font(file=os.path.join(self.PATH, "overhaul.ttf"))
+        loaded_font = tkextrafont.Font(file=os.path.join(self.PATH, "overhaul.ttf"), family="Overhaul")
         assert len(list(set(font.loaded_fonts()) - loaded)) != 0
         assert font.is_font_available("Overhaul")
         assert "Overhaul" in font.loaded_fonts()
+        label = tk.Label(self.window, text="Overhaul font", font=loaded_font)
+        label.pack()
+        self.window.update()
+        label.destroy()
 
         label = tk.Label(self.window, text="Overhaul font", font=("Overhaul", 12, "bold"))
         label.pack()

@@ -1,6 +1,6 @@
 """
 Author: RedFantom
-License: GNU GPLv3
+License: MIT License
 Copyright (c) 2018 RedFantom
 
 Python/Tkinter wrapper around extrafont library for Tk/Tcl. The original
@@ -107,6 +107,7 @@ class Font(tkfont.Font):
     def is_font_available(self, font_name) -> bool:
         """Return a boolean whether a font is available"""
         return self._tk.call("extrafont::isAvailable", font_name)
+
 
 def load(window: tk.Tk):
     """Load extrafont into a Tk interpreter"""
