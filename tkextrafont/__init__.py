@@ -114,5 +114,9 @@ def load(window: tk.Tk):
     local = os.path.abspath(os.path.dirname(__file__))
     with chdir(local):
         window.tk.eval("source pkgIndex.tcl")
-        window.tk.eval("package require extrafont")
+        try:
+            window.tk.eval("package require extrafont")
+        except tk.TclError as e:
+            if "libfontconfig" in e.message:
+                raise tk.TclError("Could not load extrafont due to missing fontconfig - See issue #1 on GitHub: <https://github.com/TkinterEP/python-tkextrafont/issues/1>")
         window._tkextrafont_loaded = True

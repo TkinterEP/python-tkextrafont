@@ -1,0 +1,50 @@
+name: Python package build and publish
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Build manylinux Python wheels
+      uses: RalfG/python-wheels-manylinux-build@v0.3.3-manylinux2014_x86_64
+      with:
+        python-versions: 'cp36-cp36m cp37-cp37m cp38-cp38 cp39-cp39'
+        build-requirements: 'scikit-build'
+        system-packages: 'python3-tkinter fontconfig-devel fontconfig cmake gcc gcc-c++ make pkgconfig tcl tcl-devel tk tk-devel'
+        package-path: '.'
+    - name: Update wheel ownership
+      run: |
+        sudo chown $USER:$USER dist/*
+    - name: Post-process manylinux wheels
+      run: |
+        sudo python ci/post_process_manylinux.py
+    - name: Create Release
+      uses: ncipollo/release-action@v1
+      with:
+        allowUpdates: true
+        omitBody: true
+        token: ${{ secrets.DEPLOY_TOKEN }}
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.DEPLOY_TOKEN }}
+        file: dist/*-manylinux*.whl
+        tag: ${{ github.ref }}
+        overwrite: true
+        file_glob: true
+    - name: PyPI Dispatch
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.DEPLOY_TOKEN }}
+        repository: TkinterEP/python-tkextrafont
+        event-type: pypi-upload
+        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
