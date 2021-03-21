@@ -49,4 +49,14 @@ build_script:
 test_script:
 - "%PYTHON%\\python.exe -m nose"
 artifacts:
-- path: "/dist/*.whl"
+  - path: "/dist/*.whl"
+deploy:
+  provider: GitHub
+  auth_token:
+    secure: w1pwzVAnkw938lSYuIKnVbkHtid9YphEEZuHsvftTV5f5KjBAQH3283q7Um5j3xU
+  artifact: /.*\.whl/
+  draft: false
+  prerelease: false
+  on:
+    branch: master
+    APPVEYOR_REPO_TAG: true

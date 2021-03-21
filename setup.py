@@ -186,7 +186,7 @@ setup(
     url="https://github.com/TkinterEP/tkextrafont",
     download_url="https://github.com/TkinterEP/tkextrafont/releases",
     license="GNU GPLv3",
-    long_description="",  # TODO
+    long_description=read("README.md"),
     long_description_content_type="text/markdown",
     zip_safe=False,
     **kwargs
