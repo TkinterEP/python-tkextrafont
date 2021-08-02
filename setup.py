@@ -179,7 +179,7 @@ else:
 
 setup(
     name="tkextrafont",
-    version="v0.6.1",
+    version="v0.6.2",
     packages=["tkextrafont"],
     description="Fonts loader for Tkinter",
     author="The extrafont and tkextrafont authors",
