@@ -10,6 +10,7 @@ install:
 # Load PGP Keys for Msys64
 - bash -lc "curl -O https://repo.msys2.org/msys/x86_64/msys2-keyring-1~20210213-2-any.pkg.tar.zst"
 - bash -lc "curl -O https://repo.msys2.org/msys/x86_64/msys2-keyring-1~20210213-2-any.pkg.tar.zst.sig"
+- dir
 - zstd\zstd.exe -d msys2-keyring-1~20210213-2-any.pkg.tar.zst
 - bash -lc "pacman -U --noconfirm --config <(echo) msys2-keyring-1~20210213-2-any.pkg.tar"
 # Verify signature AFTER updating the keyring because MSYS messes with keys too much
