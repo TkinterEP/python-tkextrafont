@@ -46,7 +46,7 @@ install:
 - set PATH=%PYTHON%;C:\msys64\mingw64\lib;%PATH%
 - "%PYTHON%\\python.exe -m pip install -U pip setuptools wheel"
 build_script:
-- "%PYTHON%\\python.exe setup.py build bdist_wheel --plat-name win64"
+- "%PYTHON%\\python.exe setup.py build bdist_wheel --plat-name win_amd64"
 # Simplify PATH so as to test binary distribution
 - set PATH=C:\WINDOWS\system32;C:\WINDOWS
 test_script:
