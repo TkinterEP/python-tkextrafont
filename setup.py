@@ -55,6 +55,7 @@ elif "win" in sys.platform:
     from setuptools import setup
     import subprocess as sp
     from typing import List, Optional
+    from wheel.bdist_wheel import bdist_wheel as _bdist_wheel
 
     dependencies = ["cmake", "tk", "toolchain", "fontconfig"]
 
@@ -167,9 +168,20 @@ elif "win" in sys.platform:
 
     specials = {}
     DependencyWalker("libextrafont.dll", specials=specials).copy_to_target("tkextrafont")
-    kwargs = {"package_data": {
-        "extrafont": ["*.dll", "pkgIndex.tcl", "extrafont.tcl", "fontnameinfo.tcl", "futmp.tcl"] + [
-            "{}/{}".format(dir.strip("/"), base) for base, dir in specials.items()]}}
+
+    class bdist_wheel(_bdist_wheel):
+        def finalize_options(self):
+            _bdist_wheel.finalize_options(self)
+            self.root_is_pure = False
+
+    kwargs = {
+        "package_data": {
+            "extrafont": ["*.dll", "pkgIndex.tcl", "extrafont.tcl", "fontnameinfo.tcl", "futmp.tcl"] + [
+                "{}/{}".format(dir.strip("/"), base) for base, dir in specials.items()]},
+        "cmdClass": {
+            "bdist_wheel": bdist_wheel
+        }
+    }
 
 else:
     printf("Only Linux and Windows are currently supported by the build system")
