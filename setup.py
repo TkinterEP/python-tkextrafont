@@ -52,7 +52,7 @@ if "linux" in sys.platform:
 elif "win" in sys.platform:
     import os
     import shutil
-    from setuptools import setup
+    from setuptools import setup, Extension
     import subprocess as sp
     from typing import List, Optional
     from wheel.bdist_wheel import bdist_wheel as _bdist_wheel
@@ -171,6 +171,7 @@ elif "win" in sys.platform:
 
     class bdist_wheel(_bdist_wheel):
         def finalize_options(self):
+            print("Ensuring to build platform-specific wheel.")
             _bdist_wheel.finalize_options(self)
             self.root_is_pure = False
 
@@ -180,7 +181,10 @@ elif "win" in sys.platform:
                 "{}/{}".format(dir.strip("/"), base) for base, dir in specials.items()]},
         "cmdClass": {
             "bdist_wheel": bdist_wheel
-        }
+        },
+        "ext_modules": [
+            Extension("libextrafont", sources=[])
+        ]
     }
 
 else:
