@@ -52,10 +52,9 @@ if "linux" in sys.platform:
 elif "win" in sys.platform:
     import os
     import shutil
-    from setuptools import setup, Distribution
+    from setuptools import setup
     import subprocess as sp
     from typing import List, Optional
-    from wheel.bdist_wheel import bdist_wheel as _bdist_wheel
 
     dependencies = ["cmake", "tk", "toolchain", "fontconfig"]
 
@@ -168,10 +167,6 @@ elif "win" in sys.platform:
 
     specials = {}
     DependencyWalker("libextrafont.dll", specials=specials).copy_to_target("tkextrafont")
-
-    class BinaryDistribution(Distribution):
-        def has_ext_modules(self, *args):
-            return True
 
     kwargs = {
         "package_data": {
