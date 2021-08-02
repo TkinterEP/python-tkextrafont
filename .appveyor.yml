@@ -8,7 +8,7 @@ install:
 - appveyor DownloadFile https://github.com/facebook/zstd/releases/download/v1.4.8/zstd-v1.4.8-win64.zip
 - 7z e zstd-v1.4.8-win64.zip -ozstd -y
 # Load PGP Keys for Msys64
-- bash -lc "curl -O https://mirror.msys2.org/msys/x86_64/msys2-keyring-1~20210213-2-any.pkg.tar.zst"
+- bash -lc "curl -O https://repo.msys2.org/msys/x86_64/msys2-keyring-1~20210213-2-any.pkg.tar.zst"
 - bash -lc "curl -O https://repo.msys2.org/msys/x86_64/msys2-keyring-1~20210213-2-any.pkg.tar.zst.sig"
 - zstd\zstd.exe -d msys2-keyring-1~20210213-2-any.pkg.tar.zst
 - bash -lc "pacman -U --noconfirm --config <(echo) msys2-keyring-1~20210213-2-any.pkg.tar"
