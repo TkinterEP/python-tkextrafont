@@ -4,16 +4,17 @@ environment:
 build: off
 install:
 - set PATH=C:\msys64\usr\bin;%PATH%
-# Load PGP Keys for Msys64
-- bash -lc "curl -O http://repo.msys2.org/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz"
-- bash -lc "curl -O http://repo.msys2.org/msys/x86_64/msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz.sig"
-- bash -lc "pacman-key --verify msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz.sig"
-- bash -lc "pacman -U --noconfirm --config <(echo) msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz"
-# Kill gpg-agent due to bug in MSYS
-- TaskKill /IM gpg-agent.exe /F
 # Download and unpack zstd for win64 to unpack MSYS packages
 - appveyor DownloadFile https://github.com/facebook/zstd/releases/download/v1.4.8/zstd-v1.4.8-win64.zip
 - 7z e zstd-v1.4.8-win64.zip -ozstd -y
+# Load PGP Keys for Msys64
+- bash -lc "curl -O https://mirror.msys2.org/msys/x86_64/msys2-keyring-1~20210213-2-any.pkg.tar.zst"
+- bash -lc "curl -O https://repo.msys2.org/msys/x86_64/msys2-keyring-1~20210213-2-any.pkg.tar.zst.sig"
+- bash -lc "pacman-key --verify msys2-keyring-1~20210213-2-any.pkg.tar.zst.sig"
+- zstd\zstd.exe -d msys2-keyring-1~20210213-2-any.pkg.tar.zst
+- bash -lc "pacman -U --noconfirm --config <(echo) msys2-keyring-1~20210213-2-any.pkg.tar"
+# Kill gpg-agent due to bug in MSYS
+- TaskKill /IM gpg-agent.exe /F
 # Download and install zstd for MSYS due to bug in MSYS
 - appveyor DownloadFile http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-zstd-1.4.8-2-any.pkg.tar.zst
 - zstd\zstd.exe -d mingw-w64-x86_64-zstd-1.4.8-2-any.pkg.tar.zst
