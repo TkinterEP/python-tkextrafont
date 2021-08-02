@@ -171,8 +171,7 @@ elif "win" in sys.platform:
     kwargs = {
         "package_data": {
             "extrafont": ["*.dll", "pkgIndex.tcl", "extrafont.tcl", "fontnameinfo.tcl", "futmp.tcl"] + [
-                "{}/{}".format(dir.strip("/"), base) for base, dir in specials.items()]},
-        "distClass": BinaryDistribution
+                "{}/{}".format(dir.strip("/"), base) for base, dir in specials.items()]}
     }
 
 else:
