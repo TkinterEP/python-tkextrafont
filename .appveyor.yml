@@ -42,6 +42,7 @@ install:
 - 7z e Dependencies_x64_Release.zip -odeps -y
 # Add %PYTHON% to the path for libffi-7.dll
 - set PATH=%PYTHON%;C:\msys64\mingw64\lib;%PATH%
+- "%PYTHON%\\python.exe -m pip install -U pip setuptools wheel"
 build_script:
 - "%PYTHON%\\python.exe setup.py build bdist_wheel"
 # Simplify PATH so as to test binary distribution
