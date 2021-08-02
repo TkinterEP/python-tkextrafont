@@ -52,7 +52,7 @@ if "linux" in sys.platform:
 elif "win" in sys.platform:
     import os
     import shutil
-    from setuptools import setup, Extension
+    from setuptools import setup, Distribution
     import subprocess as sp
     from typing import List, Optional
     from wheel.bdist_wheel import bdist_wheel as _bdist_wheel
@@ -169,22 +169,15 @@ elif "win" in sys.platform:
     specials = {}
     DependencyWalker("libextrafont.dll", specials=specials).copy_to_target("tkextrafont")
 
-    class bdist_wheel(_bdist_wheel):
-        def finalize_options(self):
-            print("Ensuring to build platform-specific wheel.")
-            _bdist_wheel.finalize_options(self)
-            self.root_is_pure = False
+    class BinaryDistribution(Distribution):
+        def has_ext_modules(self, *args):
+            return True
 
     kwargs = {
         "package_data": {
             "extrafont": ["*.dll", "pkgIndex.tcl", "extrafont.tcl", "fontnameinfo.tcl", "futmp.tcl"] + [
                 "{}/{}".format(dir.strip("/"), base) for base, dir in specials.items()]},
-        "cmdClass": {
-            "bdist_wheel": bdist_wheel
-        },
-        "ext_modules": [
-            Extension("libextrafont", sources=[])
-        ]
+        "distClass": BinaryDistribution
     }
 
 else:
