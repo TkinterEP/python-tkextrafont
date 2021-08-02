@@ -168,7 +168,7 @@ elif "win" in sys.platform:
     specials = {}
     DependencyWalker("libextrafont.dll", specials=specials).copy_to_target("tkextrafont")
     kwargs = {"package_data": {
-        "extrafont": ["*.dll", "pkgIndex.tcl", "extrafont.tcl", "fontnameinfo.tcl", "futmp.tcl"] + [
+        "tkextrafont": ["*.dll", "pkgIndex.tcl", "extrafont.tcl", "fontnameinfo.tcl", "futmp.tcl"] + [
             "{}/{}".format(dir.strip("/"), base) for base, dir in specials.items()]}}
 
 else:
