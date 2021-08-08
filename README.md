@@ -2,6 +2,8 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/s64648offncdbmbk/branch/master?svg=true)](https://ci.appveyor.com/project/RedFantom/python-tkextrafont/branch/master)
 [![Build status](https://api.travis-ci.com/TkinterEP/python-tkextrafont.svg?branch=master)](https://travis-ci.com/github/TkinterEP/python-tkextrafont/)
 [![PyPI version](https://badge.fury.io/py/tkextrafont.svg)](https://pypi.python.org/pypi/tkextrafont)
+[![License](https://img.shields.io/badge/license-MIT%20License-green)](https://github.com/TkinterEP/python-tksvg/blob/master/LICENSE.md)
+[![PyPI Format](https://img.shields.io/pypi/format/tksvg?color=purple)](https://pypi.python.org/pypi/tksvg)
 
 From the basic concept of [the old version](https://github.com/TkinterEP/python-tkextrafont.old)
 of this repository and the [build system](https://github.com/TkinterEP/python-gttk/blob/master/CMakeLists.txt)
