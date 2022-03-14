@@ -21,31 +21,6 @@ from typing import Dict, List
 _FILE_DIR = os.path.abspath(__file__)
 
 
-def _tk_dict_to_dict(d):
-    """Build a dictionary from a Tcl dictionary by parsing its str repr"""
-    # type: (tk._tkinter.Tcl_Obj) -> Dict[str, str]
-    string = str(d)  # Every Tcl_Obj supports conversion to string
-    elements = string.split(" ")
-    results, key, brackets, total = dict(), None, False, str()
-    for e in elements:
-        if key is None:  # New dictionary key
-            key = e
-        elif brackets is True:  # Brackets were opened
-            if e.endswith("}"):  # Closing brackets
-                brackets = False
-                results[key] = total + " " + e[:-1]
-                key, total = None, str()
-            else:  # Still within brackets
-                total += " " + e
-        elif e.startswith("{"):  # Open Brackets
-            brackets = True
-            total = e[1:]
-        else:  # No brackets, just a simple value
-            results[key] = e
-            key = None
-    return results
-
-
 @contextmanager
 def chdir(target):
     # type: (str) -> None
@@ -102,7 +77,14 @@ class Font(tkfont.Font):
 
     def font_info(self, fname: str) -> List[Dict[str, str]]:
         """Return info of a font file"""
-        return list(map(_tk_dict_to_dict, self._tk.call("extrafont::nameinfo", fname)))
+        tk_result_list = self._tk.splitlist(
+            self._tk.call("extrafont::nameinfo", fname)[0]
+        )
+        font_info_dict = {}
+
+        for key, value in zip(tk_result_list[0::2], tk_result_list[1::2]):
+            font_info_dict[key] = str(value)
+        return font_info_dict
 
     def is_font_available(self, font_name) -> bool:
         """Return a boolean whether a font is available"""
