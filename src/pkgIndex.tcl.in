@@ -1,0 +1,5 @@
+package ifneeded @PACKAGE_NAME@ @PACKAGE_VERSION@ \
+    "source [file join $dir extrafont.tcl]; \
+     source [file join $dir futmp.tcl]; \
+     load [file join $dir @PKG_LIB_FILE@] [string totitle @PACKAGE_NAME@]; \
+     package provide @PACKAGE_NAME@ @PACKAGE_VERSION@;"
