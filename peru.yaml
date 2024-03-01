@@ -1,0 +1,33 @@
+imports:
+  extrafont: third_party/extrafont/
+  roboto: example/
+  overhaul: tests/
+
+svn module extrafont:
+  url: https://svn.code.sf.net/p/irrational-numbers/code/pkgs/extrafont-devkit/trunk/
+  rev: "1218"
+  pick:
+    - license.terms
+    - docs/
+    - src/
+
+curl module roboto:
+  url: https://github.com/googlefonts/roboto/releases/download/v2.138/roboto-android.zip
+  unpack: zip
+  move:
+    LICENSE: LICENSE.roboto
+  pick:
+    - LICENSE.roboto
+    - Roboto-Medium.ttf
+  sha1: 0453421f680022954c48ca21c45bffc18749e6bc
+
+curl module overhaul:
+  url: https://dl.dafont.com/dl/?f=overhaul
+  unpack: zip
+  move:
+    Overhaul.ttf: overhaul.ttf
+    Readme.txt: README.overhaul
+  pick:
+    - overhaul.ttf
+    - README.overhaul
+  sha1: 9d3a95aed46aa9808f0850ffa8ed35bb46f3da46

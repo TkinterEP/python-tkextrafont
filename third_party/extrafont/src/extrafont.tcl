@@ -13,15 +13,15 @@
 
 namespace eval extrafont {
 	 # FFFD-table is the core data structure holding all the relations between
-	 #  font-files, font-families, font-full-names and font-details.
+	 #  font-files, font-familiies, font-fullnames and font-details.
 	 # *** NOTE: we are talking just about fonts loaded with extrafont::load;  
 	 # ***      fonts loaded at system-level are not included here.
 	 #  They first three components FFF (font-file, font-familiy, font-fullname)
 	 #  gives you a primary key for the D component (the font-detail dictionary)
-
+	 #  
 	variable _FFFD_Table    ;# array: key is (file,family,fullname)
 							;#        value is the font-detail
-	variable _File2TempFile ;# array: key is the originale filename (normalized), 
+	variable _File2TempFile ;# array: key is the originale filename (normalized),
 	                        ;#        value is its temporary working copy
 	variable _TempDir
 	
@@ -33,27 +33,27 @@ namespace eval extrafont {
 		expr { [lindex [file system $filename] 0] != "native" }
 	}
 
-	 # Load this submodule "fontnameinfo.tcl" in a sub-namespace
+	 # load thi submodule" fontnameinfo.tcl" in a sub-namespace
 	 # It provides the 'nameinfo' command
 	namespace eval nametable {
 		source [file join [file dirname [info script]] fontnameinfo.tcl]
 	}	
-	 # When Tk is destroyed (e.g on exit), then do a cleanup
+	 # when Tk is destroyed (e.g on exit), then do a cleanup
 	trace add command "." delete {apply { {args} {extrafont::cleanup} } }
 }
 
 
 proc extrafont::_copyToTempFile {filename} {
 	variable _TempDir
-
+	
 	if { $_TempDir == "" } {
-		set _TempDir [futmp::mktempdir [futmp::tempdir] extrafont_]		
+		set _TempDir [futmp::mktempdir [futmp::tempdir] extrafont_]
 		 # don't catch error; let it raise
 	}
-
+	
 	set fd [open $filename r] ;# on error let it raise ..
 	fconfigure $fd -translation binary
-		
+	
 	 # note: tempfile returns an open channel ; the filename is returned via upvar (in newfilename var)
 	set newfilename ""
 	set wentWrong [catch {
@@ -64,18 +64,18 @@ proc extrafont::_copyToTempFile {filename} {
 		close $fd
 		error $errmsg
 	}
-
+	
 	set wentWrong [catch {
 		fcopy $fd $cacheChannel
 		} errmsg ]
-
+	
 	close $cacheChannel
 	close $fd
 	
 	if { $wentWrong } {
 		error $errmsg
 	}
-
+	
 	return $newfilename
 }
 
@@ -94,20 +94,20 @@ proc extrafont::_copyToTempFile {filename} {
 proc extrafont::load {fontfile} {
 	variable _FFFD_Table
 	variable _File2TempFile
-			
+	
 	set fontfile [file normalize $fontfile]
 	set orig_fontfile $fontfile
 	if { [array names _FFFD_Table $orig_fontfile,*] != {} } {
 		error "Fontfile \"$orig_fontfile\" already loaded."	
 	}
-
+	
 	if { [_isVfsFile $orig_fontfile] } {
-		set fontfile [_copyToTempFile $orig_fontfile] ;# on error let it raise ..	
+		set fontfile [_copyToTempFile $orig_fontfile] ;# on error let it raise 
 		set _File2TempFile($orig_fontfile)   $fontfile	
 	}
 	if { [catch {core::load $fontfile} errmsg] } {
 		array unset _File2TempFile $orig_fontfile
-		error [string map [list $fontfile $orig_fontfile] $errmsg]	
+		error [string map [list $fontfile $orig_fontfile] $errmsg]
 	}
 	set fontsInfo {}
 	 # if nameinfo fails, don't stop; return an empty list
@@ -136,7 +136,7 @@ proc extrafont::unload {fontfile} {
 	variable _File2TempFile
 	
 	set fontfile [file normalize $fontfile]
-
+	
 	 # Fix for MacOSX : 
 	 # Since core::unload does not return an error when unloading a not-loaded file,
 	 # we must check-it before
@@ -151,13 +151,13 @@ proc extrafont::unload {fontfile} {
 		set fontfile  $_File2TempFile($orig_fontfile)
 	}
 	if { [catch {core::unload $fontfile} errmsg] } {
-		error [string map [list $fontfile $orig_fontfile] $errmsg]	
+		error [string map [list $fontfile $orig_fontfile] $errmsg]
 	}
-
+	
 	if { $isVfs } {
-		catch {file delete $fontfile}  ;# skip errors ..
+		catch {file delete $fontfile}  ;# skip errors
 		unset _File2TempFile($orig_fontfile)
-	}	
+	}
 	array unset _FFFD_Table $fontfile,*
 	return	
 } 
@@ -197,12 +197,12 @@ proc extrafont::loaded {} {
  #  query details  -family Ariel*
 proc extrafont::query { kind args } {
 	variable _FFFD_Table
-
+	
 	set allowedValues {files families fullnames details}
 	if { $kind ni $allowedValues } {
 		error "bad kind \"$kind\": must be [join $allowedValues ","]"
 	}
-
+	
 	if { $args == {} } {
 		set selector "(empty)"  ;# dummy selector
 	} elseif { [llength $args] == 2 } {
@@ -210,18 +210,18 @@ proc extrafont::query { kind args } {
 		set allowedValues {-file -family -fullname}
 		if { $selector ni $allowedValues } {
 			error "bad selector \"$selector\": must be [join $allowedValues ","]"
-		}			
+		}
 	} else {
 		error "wrong params: query _kind_ ?selector value?"
 	}
-
+	
 	switch -- $selector {
 		(empty)		{ set pattern "*" }
 		-file		{ set pattern "$selectorVal,*,*" }
 		-family		{ set pattern "*,$selectorVal,*"	}
-		-fullname	{ set pattern "*,*,$selectorVal" }		
-	}	
-
+		-fullname	{ set pattern "*,*,$selectorVal" }
+	}
+	
 	set L {}
 	foreach { key detail } [array get _FFFD_Table $pattern] {
 		lassign [split $key ","] fontfile family fullname 
@@ -229,27 +229,46 @@ proc extrafont::query { kind args } {
 			files	{ lappend L $fontfile }
 			families {	lappend L $family }
 			fullnames { lappend L $fullname}
-			details {lappend L $detail }  
+			details {lappend L $detail }
 		} 
 	}
 	lsort -unique $L 
 }
 
 
- # nameinfo $fontfile
+ # nameinfo $fontfile ?$fontPlatformID?
  # ------------------
  # Returns a list of font-info. One font-info (a dictionary) for each font
  # contained in $fontfile.
+ #
+ # fontPlatformName can be used for selecting data tailored for a given platform.
+ # It can be ("" (default) "win" or "mac"  - no support for the "Unicode platform").
+ # If fontPlatformName is "" then the extracted info are those required for
+ # the current platform (i.e "win" for windows and "mac" for mac/linux/../restOfTheWorld) 
+ #
  # Implementation note:
  #  if $fontfile is loaded, then the 'cached' font-infos are returned,
  #  else these are extracted by calling [nametable::nameinfo $fontfile]
-proc extrafont::nameinfo {fontfile} {
+proc extrafont::nameinfo {fontfile {fontPlatformName ""}} {
 	variable _FFFD_Table
-			
+	
+	if { $fontPlatformName eq "" } {
+		if { $::tcl_platform(platform) == "windows" } {
+			set fontPlatformName "win"
+		} else {
+			set fontPlatformName "mac"
+		}
+	}
+	switch -- $fontPlatformName {
+		"mac" { set fontPlatformID 1 }
+		"win" { set fontPlatformID 3 }
+		default { error "invalid fontPlatformName. Valid values are win, mac."}
+	}
+	
 	set fontfile [file normalize $fontfile]
 	set res [query details -file $fontfile]
 	if { $res == {} } {
-		set res [nametable::nameinfo $fontfile]
+		set res [nametable::nameinfo $fontfile $fontPlatformID]
 	}
 	return $res
 }
@@ -261,9 +280,9 @@ proc extrafont::cleanup {} {
 	variable _FFFD_Table
 	variable _File2TempFile
 	variable _TempDir
-
+	
 	foreach fontfile [query files] {
-		catch {unload $fontfile}  ;# don't stop it now !		
+		catch {unload $fontfile}  ;# don't stop it now !
 	}
 	
 	if { $_TempDir != "" } {
@@ -299,7 +318,6 @@ proc extrafont::isAvailable {family} {
  #   whilst
  #    extrafont::avalableFamilies A*
  #   matches all the loaded font-families (both system-wide fonts and private-fonts)
- # .....  brutto !!!!
  #   (and it's a case-sensitive matching)
  #   
 proc extrafont::availableFamilies { {familyPattern {*}} } {
