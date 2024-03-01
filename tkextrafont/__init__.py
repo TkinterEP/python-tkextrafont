@@ -12,35 +12,8 @@ loading it into the Tk interpreter.
 """
 import tkinter as tk
 import tkinter.font as tkfont
-# Standard Library
-from contextlib import contextmanager
 import os
 from typing import Dict, List
-
-
-_FILE_DIR = os.path.abspath(__file__)
-
-
-@contextmanager
-def chdir(target):
-    # type: (str) -> None
-    """
-    Temporarily change the working directory
-
-    Based on @Akuli's contribution to ttkthemes
-    Copyright (c) Akuli 2018
-    """
-    current = os.getcwd()
-    os.chdir(target)
-    try:
-        yield
-    finally:
-        os.chdir(current)
-
-
-def get_file_directory():
-    """Return an absolute path to the directory that contains this file"""
-    return os.path.dirname(_FILE_DIR)
 
 
 class Font(tkfont.Font):
@@ -94,11 +67,12 @@ class Font(tkfont.Font):
 def load(window: tk.Tk):
     """Load extrafont into a Tk interpreter"""
     local = os.path.abspath(os.path.dirname(__file__))
-    with chdir(local):
-        window.tk.eval("source pkgIndex.tcl")
-        try:
-            window.tk.eval("package require extrafont")
-        except tk.TclError as e:
-            if "libfontconfig" in e.message:
-                raise tk.TclError("Could not load extrafont due to missing fontconfig - See issue #1 on GitHub: <https://github.com/TkinterEP/python-tkextrafont/issues/1>")
-        window._tkextrafont_loaded = True
+    window.tk.setvar("dir", local)
+    window.tk.eval("source [file join $dir pkgIndex.tcl]")
+    try:
+        window.tk.eval("package require extrafont")
+    except tk.TclError as e:
+        if "libfontconfig" in e.message:
+            raise tk.TclError("Could not load extrafont due to missing fontconfig - See issue #1 on GitHub: <https://github.com/TkinterEP/python-tkextrafont/issues/1>")
+    window.tk.unsetvar("dir")
+    window._tkextrafont_loaded = True
