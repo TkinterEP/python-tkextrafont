@@ -2,16 +2,17 @@
   ==========================================================================
   TclTk extension (Win/Linux/MacOSX):
     extrafont::load
-  This command makes available to TclTk apps a new font without installing it.
+  This command makes available to TclTk apps a new font without isntalling it.
    ---
   July 2017 - A.Buratti fecit
   May  2018 - BugFix for MY_FcConfigAppFontRemoveFile (linux only)
+  Nov  2023 - Replaced __WIN32__  with _WIN32  (this is valid also for Win-64bit)
   ==========================================================================
 */
 
 #include <tcl.h>
 
-#if defined(__WIN32__)
+#if defined(_WIN32)
   #include <Windows.h>
   #include <Wingdi.h>
 #elif defined(__linux__)
@@ -21,6 +22,8 @@
 #elif defined(__APPLE__)
   #include <CoreFoundation/CoreFoundation.h>
   #include <CoreText/CTFontManager.h>
+#else
+  #error "Cannot detect the target platform:  Neither _WIN32, nor __linux__, nor __APPLE__; what else ?"
 #endif
 
  // This macro is a short for the standard parameter-list of Tcl_ObjCmdProc conformant functions.
@@ -41,7 +44,7 @@ int CMDPROC_loadfont( ClientData unused, OTHER_CMDPROC_ARGS ) {
 	const char *path = Tcl_GetStringFromObj(_objv[1], &len);
 	int res;
 	
-#if defined(__WIN32__)
+#if defined(_WIN32)
 	Tcl_DString ds;
 	Tcl_Encoding unicode;
 	
@@ -135,7 +138,7 @@ int CMDPROC_unloadfont( ClientData unused, OTHER_CMDPROC_ARGS ) {
 	const char *path = Tcl_GetStringFromObj(_objv[1], &len);   
 	int res;
 	
-#if defined(__WIN32__)
+#if defined(_WIN32)
 	Tcl_DString ds;
 	Tcl_Encoding unicode;
 	
