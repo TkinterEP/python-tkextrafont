@@ -1,0 +1,24 @@
+[build-system]
+requires = ["scikit-build-core"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "tkextrafont"
+version = "1.3.0"
+description = "Fonts loader for Tkinter"
+author = "The extrafont and tkextrafont authors"
+url = "https://github.com/TkinterEP/tkextrafont"
+
+[tool.cibuildwheel]
+skip = ["cp36-*", "cp37-*"]
+
+[tool.cibuildwheel.linux]
+before-all = "yum install -y tcl-devel tk-devel fontconfig-devel"
+
+[[tool.cibuildwheel.overrides]]
+select = "*-musllinux*"
+before-all = "apk add tcl-dev tk-dev fontconfig-dev"
+
+[tool.cibuildwheel.macos]
+# https://github.com/actions/runner-images/issues/9441#issuecomment-1976928303
+before-all = "brew install tcl-tk"

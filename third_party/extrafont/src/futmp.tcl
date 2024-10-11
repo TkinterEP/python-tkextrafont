@@ -1,7 +1,7 @@
 # futmp.tcl  - file utilities for working with temporary files.
 #
 # This package is largely derived from the tcllib's package "fileutil" 1.14.10
-# The original commands' synopsis has been changed to include an explicit
+# The original commands' synospys has been changed to include an explicit
 #  base-dir and an optional file-suffix.
 #
 #  futmp::tempdir
